@@ -20,60 +20,74 @@ app.get('/', (req, res) => {
 app.post('/', urlencodedParser, (req, res) => {
   var name = req.body.name;
   var email = req.body.email;
+
   var income = parseInt(req.body.income);
-  var deduction = parseInt(req.body.deduction);
+  var Id = parseInt(req.body.Id);
   var op = req.body.op;
-  var tax = income - (deduction + 50000);
-  if (tax <= 250000) {
-    var taxrate = 0;
-  } else if (tax > 250000 && tax <= 500000) {
-    var taxrate = 5;
-  } else if (tax > 500000 && tax <= 1000000) {
-    var taxrate = 20;
+  var HRA, DA;
+  if (income <= 10000) {
+    HRA = (income * 20) / 100;
+    DA = (income * 80) / 100;
+  } else if (income > 10001 && income <= 20000) {
+    HRA = (income * 25) / 100;
+    DA = (income * 90) / 100;
   } else {
-    var taxrate = 30;
+    HRA = (income * 30) / 100;
+    DA = (income * 95) / 100;
   }
+  var gross_income = income + HRA + DA;
 
   if (op == 'add') {
     const user = new database.User({
       name: name,
       email: email,
       income: income,
-      deduction: deduction,
-      tax: taxrate,
+      Id:Id,
+      gross_income: gross_income,
     }).save();
     return res.send('insertion successful');
   } else if (op == 'update') {
+    console.log(Id)
     database.User.updateOne(
-      { email },
+      { Id },
       {
         name,
         income,
-        deduction,
-        tax: taxrate,
+        email,
+        gross_income: gross_income,
       },
     );
     return res.send('successfully updated');
   } else if (op == 'del') {
-    console.log(email);
-    database.User.deleteOne({ email });
+    database.User.deleteOne({ name });
     return res.send('successfully deleted');
   } else if (op == 'display') {
     database.User.find({ name }).then((employees) => {
-      console.log(employees);
-      var reo =
+      var abc =
         '<html><head><title>Display Data</title></head><body><h1>Display Data</h1>{${table}}</body></html>';
       var table = '';
       for (var i = 0; i < employees.length; i++) {
         table +=
-          '<tr><td>' + (i + 1) + '</td><td>' + employees[i].name + '</td><td>' + employees[i].email + '</td><td>' + employees[i].income + '</td><td>' + employees[i].deduction + '</td><td>' + employees[i].tax + '</td></tr>';
-        }
-        table =
-          '<table border="3"><tr><th>Sr</th><th>Name</th><th>Email</th><th>Income</th><th>Deduction</th><th>Taxable Income</th>' +
-          table +
-          '</table>';
-          reo = reo.replace('{${table}}', table);
-      table = res.send(reo);
+          '<tr><td>' +
+          (i + 1) +
+          '</td><td>' +
+          employees[i].name +
+          '</td><td>' +
+          employees[i].email +
+          '</td><td>' +
+          employees[i].income +
+          '</td><td>' +
+          employees[i].Id +
+          '</td><td>' +
+          employees[i].gross_income +
+          '</td></tr>';
+      }
+      table =
+        '<table border="3"><tr><th>Sr</th><th>Name</th><th>Email</th><th>Income</th><th>Emp Id</th><th>Gross Income</th>' +
+        table +
+        '</table>';
+      abc = abc.replace('{${table}}', table);
+      table = res.send(abc);
     });
   }
 });

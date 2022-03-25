@@ -4,7 +4,7 @@ const userSchema = new mongoose.Schema({
   name: String,
   email: String,
   income: Number,
-  deduction: Number,
-  tax: Number
+  Id: Number,
+  gross_income: Number
 })
 mongoose.model('Employees', userSchema)
