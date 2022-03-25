@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N270 Mahak Porwal</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.7/angular.min.js"></script>
+    <script src="./index.js"></script>
+    <style>
+        body {
+            background-color: antiquewhite;
+            padding: 20px;
+        }
+
+        input {
+            border-radius: 3px;
+            font-size: 20px;
+            margin-left: 7px;
+            padding: 2px;
+        }
+
+        label {
+            font-size: 20px;
+        }
+
+        button {
+            height: 30px;
+            width: 100px;
+            margin-left: 100px;
+        }
+
+        span {
+            color: red;
+            font-size: 20px;
+
+        }
+    </style>
+</head>
+
+<body ng-app="">
+    <h1>Information for calculating Income Tax</h1>
+    <form name="myform" action="/" method="post">
+        <label>Employee Name:</label>
+        <input input type="text" placeholder="Name" name="name" size="20" ng-model="fname" ng-minlength="3"
+            ng-maxlength="15" required>
+        <span ng-show="myform.fname.$error.minlength">Please enter a valid Name</span>
+        <span ng-show="myform.fname.$error.maxlength">Please enter a valid Name</span><br>
+        <label>Employee Email:</label>
+        <input input type="email" placeholder="Email" name="mail" size="20" ng-model="email" required />
+        <span ng-show="myform.mail.$error.required">Invalid Email</span><br>
+        <label>Gross Total Income:</label>
+        <input type="number" placeholder="Income" name="income" size="20" ng-model="income" required>
+        <span ng-show="myform.income.$error.minlength">Value more than 6 figures</span>
+        <span ng-show="myform.income.$error.maxlength">Value less than 9 figures</span><br>
+        <label>Deductions(Investments):</label>
+        <input input type="number" placeholder="Deductions" name="deduction" size="20" ng-model="deduce"
+            ng-minlength="6" ng-maxlength="8" required>
+        <span ng-show="myform.deduction.$error.minlength">Value more than 1.5 lakhs</span><br>
+        <span ng-show="myform.deduction.$error.maxlength">Value less than 8 figures</span><br>
+        <label>Operations: </label>
+        <select name="op"><br>
+            <option value="add" name="add">Add</option>
+            <option value="update">Update</option>
+            <option value="del">Delete</option>
+            <option value="display">Display</option>
+        </select><br><br>
+        <button type="submit" name="submit">Submit</button>
+    </form>
+    </div>
+
+</body>
+
+</html>
